@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% include "triptech_web/generic_head.html" %}
+</head>
+<body  class="triptech-body">
+    {% include "triptech_web/menu.html" %}
+
+    <div id="triptech-content" class="triptech-content">
+        {% if filename_list %}
+            <div class="list-group">
+                {% for file in filename_list %}
+                    <a href="{% url 'triptech_web:data' file.id %}" class="list-group-item list-group-item-action triptech-list">
+                        {{ file.filename}}
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No files are available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

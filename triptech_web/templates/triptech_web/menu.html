@@ -1,0 +1,24 @@
+{% load static %}
+<script type="text/javascript">
+    /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+    function openNav() {
+        document.getElementById("triptech-sidenav").style.width = "250px";
+        document.getElementById("triptech-content").style.marginLeft = "260px";
+    }
+
+    /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+    function closeNav() {
+        document.getElementById("triptech-sidenav").style.width = "0";
+        document.getElementById("triptech-content").style.marginLeft = "10px";
+    }
+</script>
+<div class="triptech-container top">
+    <img src="{% static "triptech_web/images/main-logo-small-2.png" %}" onclick="openNav()">
+</div>
+
+<div id="triptech-sidenav" class="sidenav">
+    <a href="javascropt:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="{% url 'triptech_web:files' %}">Files</a>
+    <a href="{% url 'triptech_web:assignments' %}">Assignments</a>
+    <a href="#">Submissions</a>
+</div>
