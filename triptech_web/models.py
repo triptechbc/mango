@@ -24,7 +24,7 @@ class Assignments(models.Model):
         return self.title
 
     title = models.CharField(max_length=200)
-    date = models.DateTimeField('date')
+    date_created = models.DateTimeField('date')
     text = models.CharField(max_length=256)
     metadata1 = models.CharField(max_length=256)
     metadata2 = models.CharField(max_length=256)

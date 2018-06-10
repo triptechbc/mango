@@ -1,10 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+{% load static %}
+{% include "triptech_web/generic_head.html" %}
 </head>
-<body>
+<body class="triptech-body">
+    {% include "triptech_web/menu.html" %}
 
+    <div id="triptech-content" class="triptech-content">
+    <div style="padding-bottom:10px;">
+        <h1>Submissions for {{ submission_list.first.assignment }}</h1>
+        <a href="{% url "triptech_web:submissions_new" pk %}" class="btn btn-info" role="button">New</a>
+        <a href="{% url "triptech_web:view_assignment" pk%}" class="btn btn-info" role="button">Back</a>
+    </div>
+        {% if submission_list %}
+            <div class="list-group">
+                {% for submission in submission_list %}
+                    <a href="{% url 'triptech_web:submissions_view' submission.assignment_id submission.id %}" class="list-group-item list-group-item-action triptech-list">
+                        {{ submission.student_name }}
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No submissions are available.</p>
+        {% endif %}
+    </div>
 </body>
 </html>

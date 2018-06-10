@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+{% load static %}
+{% include "triptech_web/generic_head.html" %}
 </head>
-<body>
+<body class="triptech-body">
+    {% include "triptech_web/menu.html" %}
 
+    <div id="triptech-content" class="triptech-content">
+        <h1>Assignment details:</h1>
+        <p>{{ title }}</p>
+        <p>{{ date_created }}</p>
+        <p>{{ text }}</p>
+        <div>
+            <a href="{% url "triptech_web:submissions" pk %}" class="btn btn-info" role="button">View Submissions</a>
+            <a href="{% url "triptech_web:assignments" %}" class="btn btn-info" role="button">Back</a>
+        </div>
+    </div>
 </body>
 </html>

@@ -9,7 +9,7 @@
 }
 
 .triptech-content {
-    width: 100%;
+    width: calc(100% - 20px);
     height: calc(100% - 120px);
     background-color: #aaaaaa;
     margin-top: 110px;
@@ -19,7 +19,7 @@
     top: auto;
     left: auto;
     overflow: auto;
-    transition: margin-left .5s;
+    transition: margin-left .5s, width .5s;
 }
 .triptech-container {
     width: 100%;
@@ -30,6 +30,17 @@
     padding: 15px 10px;
     overflow: auto;
 }
+
+.triptech-list{
+    background-color: #cccccc;
+    width: 100%;
+    padding-left: 10px;
+}
+
+.list-group{
+    display:inline-block;
+}
+
 
 /* The side navigation menu */
 .sidenav {

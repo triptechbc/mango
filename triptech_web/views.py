@@ -1,8 +1,12 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, render_to_response
+from django.utils import timezone
 from django.urls import reverse
 from django.views import generic
+
 from .models import Filenames, Data, Assignments, Submissions
+from .forms import NewAssignmentForm, NewSubmissionForm
+
 from bokeh.io import output_file, show
 from bokeh.layouts import widgetbox
 from bokeh.models import ColumnDataSource
@@ -33,6 +37,83 @@ class AssignmentView(generic.ListView):
         :return:
         """
         return Assignments.objects.all()
+
+
+class SubmissionView(generic.ListView):
+    template_name = 'triptech_web/submission_list.html'
+    context_object_name = 'submission_list'
+
+    def get_queryset(self):
+        """
+        Returns the submissions currently available from the database
+        :return:
+        """
+        pk = self.kwargs['pk']
+        return Submissions.objects.filter(assignment_id=pk)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['pk'] = self.kwargs['pk']
+        context['assignment'] = Assignments.objects.filter(pk=self.kwargs['pk'])[0].title
+        return context
+
+
+def assignment_details(request, pk):
+
+    assignment = Assignments.objects.get(pk=pk)
+
+    context = {
+        'title': assignment.title,
+        'date_created': assignment.date_created,
+        'text': assignment.text,
+        'pk': pk
+    }
+
+    return render(request, 'triptech_web/assignment_view.html', context)
+
+
+def new_assignment(request):
+
+    if request.method == 'POST':
+        form = NewAssignmentForm(request.POST)
+        if form.is_valid():
+            a = Assignments(title=form.cleaned_data['assignment_name'], date_created=timezone.now(),
+                            text=form.cleaned_data['assignment_description'], metadata1='', metadata2='')
+            a.save()
+            return HttpResponseRedirect(reverse('triptech_web:assignments'))
+    else:
+        form = NewAssignmentForm()
+
+    return render(request, 'triptech_web/assignment_new.html', {'form': form})
+
+
+def submission_details(request, pk, pk_sub):
+    submission = Submissions.objects.get(pk=pk_sub)
+
+    context = {
+        'student_name': submission.student_name,
+        'date': submission.date,
+        'assignment': Assignments.objects.filter(pk=pk)[0].title,
+        'data_location': submission.data_location,
+        'pk': pk_sub
+    }
+
+    return render(request, 'triptech_web/submission_view.html', context)
+
+
+def submission_new(request, pk):
+    if request.method == 'POST':
+        form = NewSubmissionForm(request.POST)
+        if form.is_valid():
+            s = Submissions(student_name=form.cleaned_data['student_name'], date=timezone.now(),
+                            data_location=form.cleaned_data['data_location'],
+                            metadata1='', metadata2='', assignment_id=pk)
+            s.save()
+            return HttpResponseRedirect(reverse('triptech_web:submissions', kwargs={'pk': pk}))
+    else:
+        form = NewSubmissionForm()
+
+    return render(request, 'triptech_web/submission_new.html', {'form': form, 'pk': pk})
 
 
 def data(request, pk, **kwargs):

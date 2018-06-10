@@ -7,11 +7,12 @@
     {% include "triptech_web/menu.html" %}
 
     <div id="triptech-content" class="triptech-content">
+        <div style="padding-bottom:10px;"><a href="{% url "triptech_web:new_assignment" %}" class="btn btn-info" role="button">New</a></div>
         {% if assignment_list %}
             <div class="list-group">
                 {% for assignment in assignment_list %}
-                    <a href="{% url 'triptech_web:data' assignment.id %}" class="list-group-item list-group-item-action triptech-list">
-                        {{ assignment.assignmentname}}
+                    <a href="{% url 'triptech_web:view_assignment' assignment.id %}" class="list-group-item list-group-item-action triptech-list">
+                        {{ assignment.title}}
                     </a>
                 {% endfor %}
             </div>
