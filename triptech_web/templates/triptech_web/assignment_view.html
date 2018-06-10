@@ -8,13 +8,39 @@
 
     <div id="triptech-content" class="triptech-content">
         <h1>Assignment details:</h1>
+        <div class="alert alert-warning alert-dismissible fade show" style="display: none;" id="delete-warning">
+            <button type="button" class="close" onclick="cancelDelete()">&times;</button>
+            <strong>Warning!</strong> This will delete assignment and submissions. Click on "x" to cancel.
+            <form method="post">
+                {% csrf_token %}
+                <input type="submit" value="Delete" />
+            </form>
+        </div>
         <p>{{ title }}</p>
         <p>{{ date_created }}</p>
         <p>{{ text }}</p>
         <div>
             <a href="{% url "triptech_web:submissions" pk %}" class="btn btn-info" role="button">View Submissions</a>
+            <a href="{% url "triptech_web:edit_assignment" pk %}" class="btn btn-info" role="button">Edit</a>
+            <a href="javascript:void(0)" class="btn btn-info" onclick="deleteConfirm()">Delete</a>
             <a href="{% url "triptech_web:assignments" %}" class="btn btn-info" role="button">Back</a>
         </div>
     </div>
 </body>
+<script type="text/javascript">
+    /* Pops up confirmation, then if clicked again will delete */
+    function cancelDelete() {
+        var x = document.getElementById("delete-warning");
+        x.style.display = "none";
+    }
+    function deleteConfirm() {
+        var x = document.getElementById("delete-warning");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.con;
+        }
+
+    }
+</script>
 </html>

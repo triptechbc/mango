@@ -60,6 +60,11 @@ class SubmissionView(generic.ListView):
 
 def assignment_details(request, pk):
 
+    if request.method == 'POST':
+        a = Assignments.objects.get(pk=pk)
+        a.delete()
+        return HttpResponseRedirect(reverse('triptech_web:assignments'))
+
     assignment = Assignments.objects.get(pk=pk)
 
     context = {
@@ -87,6 +92,23 @@ def new_assignment(request):
     return render(request, 'triptech_web/assignment_new.html', {'form': form})
 
 
+def edit_assignment(request, pk):
+
+    if request.method == 'POST':
+        form = NewAssignmentForm(request.POST)
+        if form.is_valid():
+            a = Assignments.objects.get(pk=pk)
+            a.title = form.cleaned_data['assignment_name']
+            a.text = form.cleaned_data['assignment_description']
+            a.save()
+            return HttpResponseRedirect(reverse('triptech_web:view_assignment', kwargs={'pk': pk}))
+    else:
+        assignment = Assignments.objects.get(pk=pk)
+        form = NewAssignmentForm({'assignment_name': assignment.title, 'assignment_description': assignment.text})
+
+    return render(request, 'triptech_web/assignment_edit.html', {'form': form, 'pk': pk})
+
+
 def submission_details(request, pk, pk_sub):
     submission = Submissions.objects.get(pk=pk_sub)
 
@@ -95,7 +117,8 @@ def submission_details(request, pk, pk_sub):
         'date': submission.date,
         'assignment': Assignments.objects.filter(pk=pk)[0].title,
         'data_location': submission.data_location,
-        'pk': pk_sub
+        'pk': pk,
+        'pk_sub': pk_sub
     }
 
     return render(request, 'triptech_web/submission_view.html', context)
@@ -114,6 +137,22 @@ def submission_new(request, pk):
         form = NewSubmissionForm()
 
     return render(request, 'triptech_web/submission_new.html', {'form': form, 'pk': pk})
+
+
+def submission_edit(request, pk, pk_sub):
+    if request.method == 'POST':
+        form = NewSubmissionForm(request.POST)
+        if form.is_valid():
+            s = Submissions.objects.get(pk=pk_sub)
+            s.student_name = form.cleaned_data['student_name']
+            s.data_location = form.cleaned_data['data_location']
+            s.save()
+            return HttpResponseRedirect(reverse('triptech_web:submissions_view', kwargs={'pk': pk, 'pk_sub': pk_sub}))
+    else:
+        sub = Submissions.objects.get(pk=pk_sub)
+        form = NewSubmissionForm({'student_name': sub.student_name, 'data_location': sub.data_location})
+
+    return render(request, 'triptech_web/submission_edit.html', {'form': form, 'pk': pk, 'pk_sub': pk_sub})
 
 
 def data(request, pk, **kwargs):

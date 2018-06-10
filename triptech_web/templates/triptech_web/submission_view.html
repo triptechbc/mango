@@ -11,6 +11,7 @@
         <p>{{ date }}</p>
         <p>{{ data_location }}</p>
         <div>
+            <a href="{% url "triptech_web:submissions_edit" pk pk_sub %}" class="btn btn-info" role="button">Edit</a>
             <a href="{% url "triptech_web:submissions" pk %}" class="btn btn-info" role="button">Back</a>
         </div>
     </div>
