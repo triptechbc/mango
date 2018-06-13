@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% include "triptech_web/generic_head.html" %}
+</head>
+<body class="triptech-body">
+    {% include "triptech_web/menu.html" %}
+
+    <div id="triptech-content" class="triptech-content">
+        <h1>New Assignment:</h1>
+
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        <div style="padding-bottom:10px;">
+            <form method="post">
+                {% csrf_token %}
+                <div>{{ form.assignment_name.label }}</div>
+                <div>{{ form.assignment_name }}</div>
+                <div>{{ form.assignment_description.label }}</div>
+                <div>{{ form.assignment_description }}</div>
+                <input type="submit" value="Update" />
+            </form>
+        </div>
+        <div><a href="{% url "triptech_web:view_assignment" pk %}" class="btn btn-info" role="button">Back</a></div>
+    </div>
+
+</body>
+</html>
